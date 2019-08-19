@@ -1,25 +1,79 @@
+/* eslint-disable import/no-cycle */
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+import Dashboard from './views/Dashboard.vue';
+import Coins from './views/Coins.vue';
+import Login from './views/Login.vue';
+import Stocks from './views/Stocks.vue';
+import Taxes from './views/Taxes.vue';
+import Bitcoins from './views/Bitcoins.vue';
+import store from './store';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      name: '/',
+      beforeEnter: (to, from, next) => {
+        const { user } = store.state;
+
+        return user.name == null
+          ? next({ name: 'Login' })
+          : next({ name: 'Dashboard' });
+      },
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
+    },
+    {
+      path: '/stocks',
+      name: 'Stocks',
+      component: Stocks,
+    },
+    {
+      path: '/taxes',
+      name: 'Taxes',
+      component: Taxes,
+    },
+    {
+      path: '/bitcoins',
+      name: 'Bitcoins',
+      component: Bitcoins,
+    },
+    {
+      path: '/coins',
+      name: 'Coins',
+      component: Coins,
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      beforeEnter: (to, from, next) => {
+        const { user } = store.state;
+
+        return user.name == null ? next() : next({ name: 'Dashboard' });
+      },
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  const { user } = store.state;
+
+  if (to.path !== '/login') {
+    if (user.name) return next();
+
+    return next({ name: 'Login' });
+  }
+
+  return next();
+});
+
+export default router;
