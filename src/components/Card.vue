@@ -1,23 +1,38 @@
 <template>
   <div>
-    <v-card>
+    <v-card v-if="type === undefined">
       <v-card-title class="headline">{{title}}</v-card-title>
       <v-container>
         <v-row>
           <v-col class="pl-4">
-            <div class="display-1">
-              <strong>R$</strong>
-              {{parsedValue}}
+            <div v-if="value" class="display-1">
+              <strong v-if="prefix">{{prefix}}</strong>
+              {{value}}
+              <strong v-if="sufix">{{sufix}}</strong>
             </div>
           </v-col>
-          <v-col :class="classVariation" class="subtitle-1 pt-6">{{parsedVariation}}%</v-col>
+          <v-col :class="classVariation" class="subtitle-1 pt-6">{{variation}}%</v-col>
+        </v-row>
+        <v-card-actions v-if="symbol">
+          <v-btn icon :to="`/stock/${symbol}`">
+            <v-icon>mdi-chart-line</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-container>
+    </v-card>
+    <v-card v-else>
+      <v-container fluid>
+        <v-row>
+          <v-col>
+            <v-text-field
+              class="pa-3"
+              label="Preencha o código do ativo"
+              v-model="stock"
+              @keyup.enter="emit"
+            ></v-text-field>
+          </v-col>
         </v-row>
       </v-container>
-      <v-card-actions>
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -35,17 +50,37 @@ export default {
     variation: {
       type: Number,
       default: 0.0
+    },
+    prefix: {
+      type: String
+    },
+    sufix: {
+      type: String
+    },
+    type: {
+      type: String
+    },
+    symbol: {
+      type: String
     }
+  },
+  data() {
+    return {
+      stock: null
+    };
   },
   computed: {
     classVariation() {
       return this.variation > 0 ? "positive" : "negative";
-    },
-    parsedVariation() {
-      return this.variation.toFixed(2);
-    },
-    parsedValue() {
-      return this.value.toFixed(2);
+    }
+  },
+  methods: {
+    emit() {
+      if (this.stock)
+        this.$store.dispatch("getStock", {
+          stock: this.stock
+        });
+      this.stock = null;
     }
   }
 };

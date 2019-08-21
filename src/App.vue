@@ -43,12 +43,12 @@ export default {
   data: () => ({
     drawer: false,
     routes: [
-      { name: "Dashboard", path: "/dashboard" },
-      { name: "Moedas", path: "/coins" },
-      { name: "Taxas", path: "/taxes" },
-      { name: "Bitcoins", path: "/bitcoins" },
-      { name: "Bolsas", path: "/stocks" }
-    ]
-  })
+      { name: 'Dashboard', path: '/dashboard' },
+      { name: 'Moedas', path: '/coins' },
+      { name: 'Bitcoins', path: '/bitcoins' },
+      { name: 'Bolsas', path: '/stocks' },
+      { name: 'Ações', path: '/stock' },
+    ],
+  }),
 };
 </script>

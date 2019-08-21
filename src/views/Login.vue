@@ -19,13 +19,13 @@
 export default {
   data() {
     return {
-      name: null
+      name: null,
     };
   },
   methods: {
     saveUser() {
-      this.$store.commit("SAVE_USER", this.name);
-    }
-  }
+      this.$store.commit('SAVE_USER', this.name);
+    },
+  },
 };
 </script>

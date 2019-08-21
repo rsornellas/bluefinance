@@ -1,20 +1,20 @@
 <template>
-  <HelloWorld />
+  <BitcoinsGrid :bitcoins="bitcoins" />
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld';
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
+import BitcoinsGrid from '../components/BitcoinsGrid'
 
 export default {
   components: {
-    HelloWorld,
+    BitcoinsGrid,
   },
-  mounted () {
-    if(!this.bitcoins) this.$store.dispatch('getFinances');
+  mounted() {
+    if (!this.bitcoins) this.$store.dispatch("getFinances");
   },
   computed: mapState({
-    bitcoins: state => state.bitcoins,
-  }),
+    bitcoins: state => state.bitcoins
+  })
 };
 </script>

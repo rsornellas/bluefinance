@@ -3,24 +3,23 @@
 </template>
 
 <script>
-import CoinsGrid from "../components/CoinsGrid";
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import CoinsGrid from '../components/CoinsGrid';
 
 export default {
   components: {
-    CoinsGrid
+    CoinsGrid,
   },
   mounted() {
-    if(!this.coins) this.$store.dispatch('getFinances');
+    if (!this.coins) this.$store.dispatch('getFinances');
   },
   computed: mapState({
     coins: state => state.coins,
   }),
   methods: {
     parsedCoins() {
-      if(this.coins)
-        return this.coins.filter(coin => !coin.length);
-    }
+      if (this.coins) return this.coins.filter(coin => !coin.length);
+    },
   },
 };
 </script>

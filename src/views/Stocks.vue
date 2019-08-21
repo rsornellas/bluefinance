@@ -1,17 +1,17 @@
 <template>
-  <HelloWorld />
+  <StocksGrid :stocks="stocks" />
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld';
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import StocksGrid from '../components/StocksGrid'
 
 export default {
   components: {
-    HelloWorld,
+    StocksGrid,
   },
-  mounted () {
-    if(!this.stocks) this.$store.dispatch('getFinances');
+  created() {
+    if (!this.stocks) this.$store.dispatch('getFinances');
   },
   computed: mapState({
     stocks: state => state.stocks,

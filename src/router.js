@@ -5,11 +5,14 @@ import Dashboard from './views/Dashboard.vue';
 import Coins from './views/Coins.vue';
 import Login from './views/Login.vue';
 import Stocks from './views/Stocks.vue';
-import Taxes from './views/Taxes.vue';
 import Bitcoins from './views/Bitcoins.vue';
+import Stock from './views/Stock.vue';
+import StockChart from './views/StockChart.vue';
 import store from './store';
 
 Vue.use(Router);
+
+const today = new Date().toLocaleDateString('pt-br');
 
 const router = new Router({
   mode: 'history',
@@ -37,9 +40,15 @@ const router = new Router({
       component: Stocks,
     },
     {
-      path: '/taxes',
-      name: 'Taxes',
-      component: Taxes,
+      path: '/stock',
+      name: 'Stock',
+      component: Stock,
+    },
+    {
+      path: '/stock/:id',
+      name: 'StockChart',
+      component: StockChart,
+      props: true,
     },
     {
       path: '/bitcoins',
@@ -64,11 +73,18 @@ const router = new Router({
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const { user } = store.state;
 
   if (to.path !== '/login') {
-    if (user.name) return next();
+    if (user.created_at === today) {
+      await store.dispatch('getFinances');
+
+      return next();
+    }
+
+    localStorage.removeItem('user');
+    store.commit('RESET_USER');
 
     return next({ name: 'Login' });
   }

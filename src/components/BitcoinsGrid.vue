@@ -2,10 +2,10 @@
   <div class="pa-5">
     <v-container fluid>
       <v-row>
-        <v-col class="pa-1" v-for="coin in this.coins" :key="coin.name" cols="5">
+        <v-col class="pa-1" v-for="coin in this.parsedBitcoins" :key="coin.name" cols="4">
           <Card
             :title="coin.name"
-            :value="Number(coin.buy.toFixed(2))"
+            :value="Math.floor(coin.buy)"
             :variation="Number(coin.variation.toFixed(2))"
             prefix="R$"
           />
@@ -23,9 +23,14 @@ export default {
     Card
   },
   props: {
-    coins: {
+    bitcoins: {
       type: Array
     }
-  }
+  },
+  computed: {
+    parsedBitcoins() {
+      return this.bitcoins.filter(coin => coin.buy)
+    }
+  },
 };
 </script>
